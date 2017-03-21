@@ -1,0 +1,42 @@
+// @flow
+import React from 'react'
+import { Image } from 'react-native'
+import { Card, CardItem, Left, Body, Text, Button, Icon } from 'native-base'
+import type { TMovieListDetail } from '../utils/types'
+
+type Props = {
+  movie: TMovieListDetail
+}
+
+export default (props: Props) => {
+  const { movie } = props
+  console.log(`https://image.tmdb.org/t/p/w500${movie.poster_path}`)
+  return (
+    <Card>
+      <CardItem>
+        <Left>
+          <Body>
+            <Text>{ movie.title }</Text>
+            <Text note>{ movie.original_title }</Text>
+          </Body>
+        </Left>
+      </CardItem>
+      <CardItem cardBody>
+        <Image source={{ uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}` }} />
+      </CardItem>
+      <CardItem content>
+        <Text>{ movie.overview }</Text>
+      </CardItem>
+      <CardItem style={{ justifyContent: 'space-around' }}>
+        <Button transparent>
+          <Text>{ movie.vote_count} votes</Text>
+        </Button>
+        <Button transparent>
+          <Icon name='star' />
+          <Text>{ movie.vote_average }/10</Text>
+        </Button>
+        <Text>{ movie.release_date }</Text>
+      </CardItem>
+    </Card>
+  )
+}
