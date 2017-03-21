@@ -1,2 +1,2 @@
-# ReactNative30Projects
+# 30DaysofReactNative
 Project inspired from 30DaysofSwift repo
