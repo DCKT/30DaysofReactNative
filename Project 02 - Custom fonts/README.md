@@ -11,7 +11,7 @@ In your `package.json`
 
 Run `react-native link` will make all the works for you <3
 
-**Note :** 
+**Note :** On Android, take care of your filename.
 
 #### Quick log fonts available on iOS
 ```
