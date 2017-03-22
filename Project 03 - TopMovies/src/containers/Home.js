@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Container, Header, Title, Content, Button, Left, Right, Body, Icon, Spinner } from 'native-base'
+import { View } from 'react-native'
+import { Spinner } from 'native-base'
 import { fetchTopRatedMovies } from '../actions/movies'
 import type { TMovieListDetail } from '../utils/types'
 import ListCardItem from '../components/ListCardItem'
@@ -22,29 +23,17 @@ class Home extends React.Component {
     const { movies } = this.props
 
     return (
-      <Container>
-        <Header>
-          <Left>
-            <Button transparent>
-              <Icon name='menu' />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Top rated movies</Title>
-          </Body>
-          <Right />
-        </Header>
-
-        <Content>
-          {
-            movies.length ? movies.map((movie, i) => (
-              <ListCardItem movie={movie} key={i} />
-            )) : <Spinner />
-          }
-        </Content>
-      </Container>
+      <View>
+        {
+          movies.length ? movies.map(this._renderMovie) : <Spinner />
+        }
+      </View>
     )
   }
+
+  _renderMovie = (movie: TMovieListDetail, i: number) => (
+    <ListCardItem movie={movie} key={i} />
+  )
 }
 
 const mapStateToProps = ({ movies }) => ({
