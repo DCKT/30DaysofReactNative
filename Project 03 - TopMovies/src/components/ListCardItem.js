@@ -10,7 +10,7 @@ type Props = {
 
 export default (props: Props) => {
   const { movie } = props
-  console.log(`https://image.tmdb.org/t/p/w500${movie.poster_path}`)
+
   return (
     <Card>
       <CardItem>
@@ -22,7 +22,7 @@ export default (props: Props) => {
         </Left>
       </CardItem>
       <CardItem cardBody>
-        <Image source={{ uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}` }} />
+        <Image source={{ uri: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` }} style={{ width: 500, height: 200 }} />
       </CardItem>
       <CardItem content>
         <Text>{ movie.overview }</Text>
