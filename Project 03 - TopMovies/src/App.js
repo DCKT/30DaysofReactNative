@@ -1,19 +1,21 @@
 import React from 'react'
-import {
-  NavigationProvider,
-  StackNavigation
-} from '@expo/ex-navigation'
 import { Provider } from 'react-redux'
 import store from './store'
-import Router from './utils/router'
+
+import { StackNavigator } from 'react-navigation'
+import Home from './containers/Home'
+import Details from './containers/Details'
+
+const Router = StackNavigator({
+  Home: { screen: Home },
+  Details: { screen: Details }
+})
 
 export default class App extends React.Component {
   render () {
     return (
       <Provider store={store}>
-        <NavigationProvider router={Router}>
-          <StackNavigation initialRoute={Router.getRoute('home')} />
-        </NavigationProvider>
+        <Router />
       </Provider>
     )
   }

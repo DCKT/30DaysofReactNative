@@ -1,7 +1,8 @@
 import React from 'react'
+import { StatusBar } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Container, Header, Title, Content, Button, Left, Right, Body, Icon, Spinner } from 'native-base'
+import { Container, Content, Spinner } from 'native-base'
 import { fetchTopRatedMovies, fetchMovieDetails } from '../actions/movies'
 import type { TMovieListDetail } from '../utils/types'
 import Router from '../utils/router'
@@ -17,6 +18,22 @@ type Props = {
 class Home extends React.Component {
   props: Props
 
+  static navigationOptions = {
+    // // Title may be a simple string:
+    // title: 'Hello',
+
+    // Or the title string may be a function of the navigation prop:
+    title: ({ state }) => `Top rated movies`,
+    header: {
+      style: {
+        backgroundColor: '#26A69A'
+      },
+      titleStyle: {
+        color: '#fff'
+      }
+    }
+  }
+
   componentDidMount () {
     this.props.fetchTopRatedMovies()
   }
@@ -26,17 +43,10 @@ class Home extends React.Component {
 
     return (
       <Container>
-        <Header>
-          <Left>
-            <Button transparent>
-              <Icon name='menu' />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Top rated movies</Title>
-          </Body>
-          <Right />
-        </Header>
+        <StatusBar
+          backgroundColor='#009688'
+          barStyle='light-content'
+        />
         <Content>
           { movies.length ? movies.map(this._renderMovie) : <Spinner /> }
         </Content>
