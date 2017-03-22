@@ -17,6 +17,6 @@ export const fetchTopRated = (options: TopRatedOptions) => {
 
 /* https://developers.themoviedb.org/3/movies/get-movie-details */
 export const fetchMovieDetails = (options: TMovieDetailsOptions) => {
-  return fetch(ENDPOINT(`movie/${options.id}`, `language=en-US`))
+  return fetch(ENDPOINT(`${options.id}`, `language=en-US`))
     .then(res => res.json())
 }

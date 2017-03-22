@@ -1,11 +1,13 @@
 // @flow
 import React from 'react'
 import { connect } from 'react-redux'
-import { View, Image } from 'react-native'
+import { Image } from 'react-native'
+import { Container, Header, Title, Content, Button, Left, Right, Body, Icon, Spinner } from 'native-base'
 import type { TMovieDetails } from '../utils/types'
 
 type Props = {
-  details: TMovieDetails
+  details: TMovieDetails,
+  navigator: Object
 }
 
 class Details extends React.Component {
@@ -15,9 +17,26 @@ class Details extends React.Component {
     const { details } = this.props
 
     return (
-      <View>
-        <Image source={{ uri: details.backdrop_path }} style={{ width: 500, height: 250 }} />
-      </View>
+      <Container>
+        <Header>
+          <Left>
+            <Button transparent onPress={() => this.props.navigator.pop()}>
+              <Icon name='arrow-back' />
+            </Button>
+          </Left>
+          <Body>
+            <Title>{ details ? details.title : null }</Title>
+          </Body>
+          <Right />
+        </Header>
+        <Content>
+          {
+            details ? (
+              <Image source={{ uri: `https://image.tmdb.org/t/p/w500${details.backdrop_path}` }} style={{ width: 500, height: 250 }} />
+            ) : <Spinner />
+          }
+        </Content>
+      </Container>
     )
   }
 }

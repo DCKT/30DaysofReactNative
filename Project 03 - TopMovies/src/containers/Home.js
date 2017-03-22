@@ -1,15 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { View } from 'react-native'
 import { Container, Header, Title, Content, Button, Left, Right, Body, Icon, Spinner } from 'native-base'
-import { fetchTopRatedMovies } from '../actions/movies'
+import { fetchTopRatedMovies, fetchMovieDetails } from '../actions/movies'
 import type { TMovieListDetail } from '../utils/types'
+import Router from '../utils/router'
 import ListCardItem from '../components/ListCardItem'
 
 type Props = {
   fetchTopRatedMovies: Function,
-  movies: Array<TMovieListDetail>
+  fetchMovieDetails: Function,
+  movies: Array<TMovieListDetail>,
+  navigator: Object
 }
 
 class Home extends React.Component {
@@ -35,19 +37,21 @@ class Home extends React.Component {
           </Body>
           <Right />
         </Header>
-
         <Content>
-          {
-            movies.length ? movies.map(this._renderMovie) : <Spinner />
-          }
+          { movies.length ? movies.map(this._renderMovie) : <Spinner /> }
         </Content>
       </Container>
     )
   }
 
   _renderMovie = (movie: TMovieListDetail, i: number) => (
-    <ListCardItem movie={movie} key={i} />
+    <ListCardItem movie={movie} key={i} onPress={this._goToDetails(movie.id)} />
   )
+
+  _goToDetails = (movie_id: string) => () => {
+    this.props.fetchMovieDetails(movie_id)
+    this.props.navigator.push(Router.getRoute('details'))
+  }
 }
 
 const mapStateToProps = ({ movies }) => ({
@@ -55,7 +59,8 @@ const mapStateToProps = ({ movies }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchTopRatedMovies: bindActionCreators(fetchTopRatedMovies, dispatch)
+  fetchTopRatedMovies: bindActionCreators(fetchTopRatedMovies, dispatch),
+  fetchMovieDetails: bindActionCreators(fetchMovieDetails, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

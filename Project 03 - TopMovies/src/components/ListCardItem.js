@@ -5,15 +5,16 @@ import { Card, CardItem, Left, Body, Text, Button, Icon } from 'native-base'
 import type { TMovieListDetail } from '../utils/types'
 
 type Props = {
-  movie: TMovieListDetail
+  movie: TMovieListDetail,
+  onPress: Function
 }
 
 export default (props: Props) => {
-  const { movie } = props
+  const { movie, onPress } = props
 
   return (
     <Card>
-      <CardItem>
+      <CardItem button onPress={onPress}>
         <Left>
           <Body>
             <Text>{ movie.title }</Text>
@@ -21,7 +22,7 @@ export default (props: Props) => {
           </Body>
         </Left>
       </CardItem>
-      <CardItem cardBody>
+      <CardItem cardBody button onPress={onPress}>
         <Image source={{ uri: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` }} style={{ width: 500, height: 200 }} />
       </CardItem>
       <CardItem content>
