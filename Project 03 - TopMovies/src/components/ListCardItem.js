@@ -33,7 +33,7 @@ export default (props: Props) => {
           <Text>{ movie.vote_count} votes</Text>
         </Button>
         <Button transparent>
-          <Icon name='star' />
+          <Icon ios='ios-star' android='md-star' />
           <Text>{ movie.vote_average }/10</Text>
         </Button>
         <Text>{ movie.release_date }</Text>

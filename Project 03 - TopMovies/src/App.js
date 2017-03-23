@@ -9,6 +9,9 @@ import Details from './containers/Details'
 const Router = StackNavigator({
   Home: { screen: Home },
   Details: { screen: Details }
+}, {
+  mode: 'card',
+  headerMode: 'screen'
 })
 
 export default class App extends React.Component {

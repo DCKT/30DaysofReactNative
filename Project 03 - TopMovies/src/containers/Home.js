@@ -5,25 +5,20 @@ import { bindActionCreators } from 'redux'
 import { Container, Content, Spinner } from 'native-base'
 import { fetchTopRatedMovies, fetchMovieDetails } from '../actions/movies'
 import type { TMovieListDetail } from '../utils/types'
-import Router from '../utils/router'
 import ListCardItem from '../components/ListCardItem'
 
 type Props = {
   fetchTopRatedMovies: Function,
   fetchMovieDetails: Function,
   movies: Array<TMovieListDetail>,
-  navigator: Object
+  navigation: Object
 }
 
 class Home extends React.Component {
   props: Props
 
   static navigationOptions = {
-    // // Title may be a simple string:
-    // title: 'Hello',
-
-    // Or the title string may be a function of the navigation prop:
-    title: ({ state }) => `Top rated movies`,
+    title: 'Top rated movies',
     header: {
       style: {
         backgroundColor: '#26A69A'
@@ -60,7 +55,7 @@ class Home extends React.Component {
 
   _goToDetails = (movie_id: string) => () => {
     this.props.fetchMovieDetails(movie_id)
-    this.props.navigator.push(Router.getRoute('details'))
+    this.props.navigation.navigate('Details')
   }
 }
 
