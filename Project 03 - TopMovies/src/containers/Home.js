@@ -11,7 +11,8 @@ type Props = {
   fetchTopRatedMovies: Function,
   fetchMovieDetails: Function,
   movies: Array<TMovieListDetail>,
-  navigation: Object
+  navigation: Object,
+  isFetching: boolean
 }
 
 class Home extends React.Component {
@@ -34,7 +35,7 @@ class Home extends React.Component {
   }
 
   render () {
-    const { movies } = this.props
+    const { movies, isFetching } = this.props
 
     return (
       <Container>
@@ -43,7 +44,7 @@ class Home extends React.Component {
           barStyle='light-content'
         />
         <Content>
-          { movies.length ? movies.map(this._renderMovie) : <Spinner /> }
+          { isFetching ? <Spinner /> : movies ? movies.map(this._renderMovie) : null }
         </Content>
       </Container>
     )
@@ -60,7 +61,8 @@ class Home extends React.Component {
 }
 
 const mapStateToProps = ({ movies }) => ({
-  movies: movies.topRated
+  movies: movies.topRated,
+  isFetching: movies.isFetching
 })
 
 const mapDispatchToProps = dispatch => ({
