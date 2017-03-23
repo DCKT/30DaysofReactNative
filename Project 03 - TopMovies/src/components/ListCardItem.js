@@ -23,7 +23,7 @@ export default (props: Props) => {
         </Left>
       </CardItem>
       <CardItem cardBody button onPress={onPress}>
-        <Image source={{ uri: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` }} style={{ width: 500, height: 200 }} />
+        <Image source={{ uri: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}` }} style={{ flex: 1, height: 200 }} />
       </CardItem>
       <CardItem content>
         <Text>{ movie.overview }</Text>
