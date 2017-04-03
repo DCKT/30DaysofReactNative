@@ -75,10 +75,10 @@ class Home extends React.Component {
 
     return (
       <View style={{ backgroundColor: '#242424', flex: 1, justifyContent: 'space-between' }}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', flexGrow: 5 }}>
+        <View style={{ flex: 1, justifyContent: 'center', flexGrow: 5 }}>
           {
             isFetching ? <Spinner color='white' /> : weatherData ? (
-              <View>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.city}>
                   {weatherData.name.toUpperCase()}
                 </Text>
