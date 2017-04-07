@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet, Text, Image } from 'react-native'
+import { View, StyleSheet, StatusBar, Image } from 'react-native'
 import { Button, Text as NText } from 'native-base'
 import SplashScreen from 'react-native-splash-screen'
 import Video from 'react-native-video'
@@ -18,6 +18,10 @@ class Home extends React.Component {
   render () {
     return (
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
+        <StatusBar
+          backgroundColor='transparent'
+          barStyle='light-content'
+        />
         <Video source={require('../assets/moments.mp4')}   // Can be a URL or a local file.
           ref={(ref) => {
             this.player = ref
