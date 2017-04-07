@@ -1,8 +1,3 @@
-# Project 06 - Video background
-
-The goal was to reproduce the Spotify login screen with a video as background.
-I used the `react-native-video` package to use a video player.
-
 # react-native-starter
 Simple React Native starter kit 
 
