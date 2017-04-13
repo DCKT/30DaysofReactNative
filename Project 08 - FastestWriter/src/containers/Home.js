@@ -1,14 +1,14 @@
 import React from 'react'
-import { StyleSheet, StatusBar, View } from 'react-native'
+import { StyleSheet, StatusBar, View, Text } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Button, Text } from 'native-base'
+import { Button, Text as NText } from 'native-base'
 import { getTimestamp } from '../actions/demo'
 import SplashScreen from 'react-native-splash-screen'
 import LinearGradient from 'react-native-linear-gradient'
 
 type Props = {
-  navigator: Object
+  navigation: Object
 }
 
 class Home extends React.Component {
@@ -30,20 +30,29 @@ class Home extends React.Component {
       <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.linearGradient}>
         <StatusBar backgroundColor='#009688' barStyle='light-content' />
         <View style={styles.noBackground}>
-          <Text style={styles.subTitle}>Are you the</Text>
-          <Text style={styles.title}>Fastest Writer ?</Text>
-          <Button block light style={styles.button}>
-            <Text>Play</Text>
-          </Button>
+          <View style={[styles.container, { justifyContent: 'flex-end' }]}>
+            <Text style={styles.subTitle}>Are you the</Text>
+            <Text style={styles.title}>Fastest Writer ?</Text>
+          </View>
+          <View style={styles.container}>
+            <Button block light style={styles.button} onPress={this._runGame}>
+              <NText style={{ fontFamily: 'Pixel Bug', fontSize: 20 }}>Play</NText>
+            </Button>
+          </View>
         </View>
       </LinearGradient>
     )
+  }
+
+  _runGame = () => {
+    this.props.navigation.navigate('Game')
   }
 }
 
 const styles = StyleSheet.create({
   noBackground: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    flex: 1
   },
   linearGradient: {
     flex: 1,
@@ -51,10 +60,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   subTitle: {
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'Pixel Bug',
+    color: '#fff',
+    fontSize: 25,
   },
   title: {
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'Pixel Bug',
+    fontSize: 55,
+    color: '#fff'
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center'
   }
 })
 

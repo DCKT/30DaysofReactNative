@@ -5,9 +5,11 @@ import store from './store'
 
 import { StackNavigator } from 'react-navigation'
 import Home from './containers/Home'
+import Game from './containers/Game'
 
 const Router = StackNavigator({
-  Home: { screen: Home }
+  Home: { screen: Home },
+  Game: { screen: Game }
 }, {
   headerMode: 'screen'
 })

@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -72,6 +71,7 @@
 		E9E95DFDE75D41D0840444C9 /* SanFranciscoThin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EEB8F8CA15B34C0AA9C123D3 /* SanFranciscoThin.ttf */; };
 		ED1FE2403E6345F096E7A133 /* Comic Sans MS.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B0D9DEE4153A41C190C8299F /* Comic Sans MS.ttf */; };
 		F96A5C5CA5D34A56BA657242 /* Microsoft Sans Serif.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B689B47C012246F8BDD485BB /* Microsoft Sans Serif.ttf */; };
+		09DFBB3278424612B602483C /* Pixel Bug.otf in Resources */ = {isa = PBXBuildFile; fileRef = 438A78721D6C465D9D77CA1A /* Pixel Bug.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -343,6 +343,7 @@
 		F43D3208473C4491A8645136 /* Rubik-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-LightItalic.ttf"; path = "../node_modules/native-base/Fonts/Rubik-LightItalic.ttf"; sourceTree = "<group>"; };
 		F46CDAB822CF434DBB093883 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		FC2FB450CAA1466CBA8134DF /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		438A78721D6C465D9D77CA1A /* Pixel Bug.otf */ = {isa = PBXFileReference; name = "Pixel Bug.otf"; path = "../assets/fonts/Pixel Bug.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -621,6 +622,7 @@
 				E81592EC4E244CDA8FFAA2C2 /* Skia.ttf */,
 				EB86CD5D2E0548B78E8CF208 /* Times New Roman.ttf */,
 				F46CDAB822CF434DBB093883 /* Zocial.ttf */,
+				438A78721D6C465D9D77CA1A /* Pixel Bug.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1050,6 +1052,7 @@
 				B3124DA6058D42BA8874ABCA /* Skia.ttf in Resources */,
 				CB339CEB0ED44B5596C0D470 /* Times New Roman.ttf in Resources */,
 				A1CB3D4679624B06BA6F59E1 /* Zocial.ttf in Resources */,
+				09DFBB3278424612B602483C /* Pixel Bug.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
