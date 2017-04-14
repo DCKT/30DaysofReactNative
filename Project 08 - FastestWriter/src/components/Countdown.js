@@ -36,7 +36,7 @@ export default class Countdown extends React.Component {
   }
 
   componentDidMount () {
-    this._countdown()
+    // this._countdown()
   }
 
   componentWillUnmount () {

@@ -1,10 +1,8 @@
 /* eslint-disable */
 /*
-* Credits http://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
+* Credits https://css-tricks.com/snippets/javascript/shuffle-array/
 */
-export default function shuffle (a: Array<any>): Array<any> {
-  for (let i = a.length; i; i--) {
-    let j = Math.floor(Math.random() * i)
-    [a[i - 1], a[j]] = [a[j], a[i - 1]]
-  }
+export default function shuffle(o) {
+	for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+	return o
 }
