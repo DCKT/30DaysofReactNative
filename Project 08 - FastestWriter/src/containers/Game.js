@@ -1,9 +1,13 @@
 // @flow
 
 import React from 'react'
-import { StyleSheet, View, TextInput, KeyboardAvoidingView, Text, ScrollView } from 'react-native'
+import {
+  StyleSheet, View, TextInput, KeyboardAvoidingView, Text,
+  ScrollView, Vibration
+} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { last, slice } from 'lodash'
+import { Button, Text as NText } from 'native-base'
 
 import Countdown from '../components/Countdown'
 
@@ -11,6 +15,7 @@ import shuffle from '../utils/shuffle'
 import WORDS from '../utils/words/en'
 
 const INITIAL_COUNTDOWN = 3
+const GAME_TIME = 60
 
 class Game extends React.Component {
   static navigationOptions = {
@@ -26,48 +31,70 @@ class Game extends React.Component {
   }
 
   state = {
-    isCountdownVisible: true,
+    isCountdownVisible: false,
+    isGameRunning: false,
     score: 0
   }
 
   render () {
-    const { isCountdownVisible } = this.state
+    const { isCountdownVisible, isGameRunning, score } = this.state
 
     return (
       <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.linearGradient}>
         <View style={styles.noBackground}>
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            {/*{
-              isCountdownVisible && <Countdown initial={INITIAL_COUNTDOWN} onCountEnd={this._onCountEnd} />
-            }*/}
-          </View>
+          {
+            isCountdownVisible ? (
+              <View style={styles.containerCenter}>
+                <Countdown initial={INITIAL_COUNTDOWN} onCountEnd={this._onCountEnd} />
+              </View>
+            ) : (
+              isGameRunning ? (
+                <KeyboardAvoidingView behavior='padding' style={{ paddingTop: 40 }}>
+                  <Countdown initial={GAME_TIME} onCountEnd={this._onGameEnd} style={styles.counter} />
+                  <ScrollView
+                    ref='scrollView'
+                    onContentSizeChange={(_, height) => this.refs.scrollView.scrollTo({y: height - 300})}
+                    keyboardDismissMode='none'
+                    keyboardShouldPersistTaps='always'
+                    scrollEnabled={false}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={styles.scrollViewContainer}>
+                    {
+                      this.WORDS.map(this._renderWord)
+                    }
+                    <View style={styles.inputContainer}>
+                      <TextInput
+                        ref={component => this._input = component}
+                        autoFocus={true}
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        onChangeText={this._onChangeText}
+                        onSubmitEditing={this._checkWord}
+                        blurOnSubmit={false}
+                        style={styles.input}
+                      />
+                    </View>
+                  </ScrollView>
+                </KeyboardAvoidingView>
+              ) : (
+                <View style={styles.containerCenter}>
+                  <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <Text style={styles.score}>SCORE :</Text>
+                    <Text style={styles.score}>
+                      { score }
+                      <Text style={[styles.score, styles.scoreWord]}> words</Text>
+                    </Text>
+                  </View>
+                  <View style={{ flex: 1, justifyContent: 'center' }}>
+                    <Button block light style={styles.button} onPress={this._restartGame}>
+                      <NText style={{ fontFamily: 'Pixel Bug', fontSize: 20 }}>RESTART</NText>
+                    </Button>
+                  </View>
+                </View>
+              )
+            )
+          }
         </View>
-        <KeyboardAvoidingView behavior='padding' style={{ paddingTop: 40 }}>
-          <ScrollView
-            ref='scrollView'
-            onContentSizeChange={(_, height) => this.refs.scrollView.scrollTo({y: height - 300})}
-            keyboardDismissMode='none'
-            keyboardShouldPersistTaps='always'
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollViewContainer}>
-            {
-              this.WORDS.map(this._renderWord)
-            }
-          </ScrollView>
-          <View style={styles.inputContainer}>
-            <TextInput
-              ref={component => this._input = component}
-              autoFocus={true}
-              autoCapitalize='none'
-              autoCorrect={false}
-              onChangeText={this._onChangeText}
-              onSubmitEditing={this._checkWord}
-              blurOnSubmit={false}
-              style={styles.input}
-            />
-          </View>
-        </KeyboardAvoidingView>
       </LinearGradient>
     )
   }
@@ -79,7 +106,11 @@ class Game extends React.Component {
   )
 
   _onCountEnd = () => {
-    this.setState({ isCountdownVisible: false })
+    this.setState({ isCountdownVisible: false, isGameRunning: true })
+  }
+
+  _onGameEnd = () => {
+    this.setState({ isGameRunning: false })
   }
 
   _onChangeText = currentText => this.setState({ currentText })
@@ -93,8 +124,12 @@ class Game extends React.Component {
       this.WORDS = slice(this.WORDS, 0, this.WORDS.length - 1)
       this._input.setNativeProps({ text: '' })
     } else {
-
+      Vibration.vibrate()
     }
+  }
+
+  _restartGame = () => {
+    this.setState({ isCountdownVisible: true })
   }
 }
 
@@ -102,6 +137,11 @@ const styles = StyleSheet.create({
   noBackground: {
     backgroundColor: 'transparent',
     flex: 1
+  },
+  containerCenter: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   linearGradient: {
     flex: 1,
@@ -137,6 +177,14 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     paddingHorizontal: 10
+  },
+  score: {
+    color: '#fff',
+    fontFamily: 'Pixel Bug',
+    fontSize: 56
+  },
+  scoreWord: {
+    fontSize: 32
   }
 })
 

@@ -36,7 +36,7 @@ class Home extends React.Component {
           </View>
           <View style={styles.container}>
             <Button block light style={styles.button} onPress={this._runGame}>
-              <NText style={{ fontFamily: 'Pixel Bug', fontSize: 20 }}>Play</NText>
+              <NText style={{ fontFamily: 'Pixel Bug', fontSize: 20 }}>PLAY</NText>
             </Button>
           </View>
         </View>
