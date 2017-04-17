@@ -3,7 +3,7 @@
 import React from 'react'
 import {
   StyleSheet, View, TextInput, Animated, Text,
-  ScrollView, Vibration, Platform
+  ScrollView, Vibration, Platform, BackAndroid
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { last, slice } from 'lodash'
@@ -34,6 +34,10 @@ class Game extends React.Component {
       isGameRunning: false,
       score: 0
     }
+  }
+
+  componentDidMount () {
+    BackAndroid.addEventListener('hardwareBackPress', () => false)
   }
 
   render () {
