@@ -28,7 +28,7 @@ class Home extends React.Component {
   render () {
     return (
       <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.linearGradient}>
-        <StatusBar backgroundColor='#009688' barStyle='light-content' />
+        <StatusBar backgroundColor='#4c669f' barStyle='light-content' />
         <View style={styles.noBackground}>
           <View style={[styles.container, { justifyContent: 'flex-end' }]}>
             <Text style={styles.subTitle}>Are you the</Text>

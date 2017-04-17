@@ -2,8 +2,8 @@
 
 import React from 'react'
 import {
-  StyleSheet, View, TextInput, KeyboardAvoidingView, Text,
-  ScrollView, Vibration
+  StyleSheet, View, TextInput, Animated, Text,
+  ScrollView, Vibration, Platform
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { last, slice } from 'lodash'
@@ -12,7 +12,7 @@ import { Button, Text as NText } from 'native-base'
 import Countdown from '../components/Countdown'
 
 import shuffle from '../utils/shuffle'
-import WORDS from '../utils/words/en'
+import WORDS_LIST from '../utils/words/en'
 
 const INITIAL_COUNTDOWN = 3
 const GAME_TIME = 60
@@ -27,13 +27,13 @@ class Game extends React.Component {
   constructor () {
     super()
 
-    this.WORDS = shuffle(WORDS).slice(0, 150)
-  }
-
-  state = {
-    isCountdownVisible: false,
-    isGameRunning: false,
-    score: 0
+    this.fadeAnim = new Animated.Value(1)
+    this.state = {
+      words: shuffle(WORDS_LIST).slice(0, 150),
+      isCountdownVisible: true,
+      isGameRunning: false,
+      score: 0
+    }
   }
 
   render () {
@@ -43,55 +43,53 @@ class Game extends React.Component {
       <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.linearGradient}>
         <View style={styles.noBackground}>
           {
-            isCountdownVisible ? (
-              <View style={styles.containerCenter}>
-                <Countdown initial={INITIAL_COUNTDOWN} onCountEnd={this._onCountEnd} />
+            isCountdownVisible ? this._renderCountdown() : null
+          }
+          {
+            isCountdownVisible ? null : isGameRunning ? (
+              <View style={styles.gameContainer}>
+                <Countdown initial={GAME_TIME} onCountEnd={this._onGameEnd} style={styles.counter} />
+                <ScrollView
+                  ref={ref => this.scrollView = ref}
+                  onContentSizeChange={() => this.scrollView.scrollToEnd()}
+                  keyboardDismissMode='none'
+                  keyboardShouldPersistTaps='always'
+                  scrollEnabled={false}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={styles.scrollViewContainer}>
+                  {
+                    this.state.words.map(this._renderWord)
+                  }
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      ref={component => this._input = component}
+                      autoFocus={true}
+                      autoCapitalize='none'
+                      autoCorrect={false}
+                      onChangeText={this._onChangeText}
+                      onSubmitEditing={this._checkWord}
+                      blurOnSubmit={false}
+                      underlineColorAndroid='#fff'
+                      style={styles.input}
+                    />
+                  </View>
+                </ScrollView>
               </View>
             ) : (
-              isGameRunning ? (
-                <KeyboardAvoidingView behavior='padding' style={{ paddingTop: 40 }}>
-                  <Countdown initial={GAME_TIME} onCountEnd={this._onGameEnd} style={styles.counter} />
-                  <ScrollView
-                    ref='scrollView'
-                    onContentSizeChange={(_, height) => this.refs.scrollView.scrollTo({y: height - 300})}
-                    keyboardDismissMode='none'
-                    keyboardShouldPersistTaps='always'
-                    scrollEnabled={false}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={styles.scrollViewContainer}>
-                    {
-                      this.WORDS.map(this._renderWord)
-                    }
-                    <View style={styles.inputContainer}>
-                      <TextInput
-                        ref={component => this._input = component}
-                        autoFocus={true}
-                        autoCapitalize='none'
-                        autoCorrect={false}
-                        onChangeText={this._onChangeText}
-                        onSubmitEditing={this._checkWord}
-                        blurOnSubmit={false}
-                        style={styles.input}
-                      />
-                    </View>
-                  </ScrollView>
-                </KeyboardAvoidingView>
-              ) : (
-                <View style={styles.containerCenter}>
-                  <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                    <Text style={styles.score}>SCORE :</Text>
-                    <Text style={styles.score}>
-                      { score }
-                      <Text style={[styles.score, styles.scoreWord]}> words</Text>
-                    </Text>
-                  </View>
-                  <View style={{ flex: 1, justifyContent: 'center' }}>
-                    <Button block light style={styles.button} onPress={this._restartGame}>
-                      <NText style={{ fontFamily: 'Pixel Bug', fontSize: 20 }}>RESTART</NText>
-                    </Button>
-                  </View>
+              <View style={styles.containerCenter}>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                  <Text style={styles.score}>SCORE :</Text>
+                  <Text style={styles.score}>
+                    { score }
+                    <Text style={[styles.score, styles.scoreWord]}> words</Text>
+                  </Text>
                 </View>
-              )
+                <View style={{ flex: 1, justifyContent: 'center' }}>
+                  <Button block light style={styles.button} onPress={this._restartGame}>
+                    <NText style={{ fontFamily: 'Pixel Bug', fontSize: 20 }}>RESTART</NText>
+                  </Button>
+                </View>
+              </View>
             )
           }
         </View>
@@ -99,11 +97,24 @@ class Game extends React.Component {
     )
   }
 
-  _renderWord = (word: string, i: number) => (
-    <View key={i} style={[styles.wordContainer, i === this.WORDS.length - 1 ? styles.currentWordContainer : {}]}>
-      <Text style={styles.wordText}>{ word }</Text>
+  _renderCountdown = () => (
+    <View style={styles.containerCenter}>
+      <Countdown initial={INITIAL_COUNTDOWN} onCountEnd={this._onCountEnd} />
     </View>
   )
+
+  _renderWord = (word: string, i: number) => {
+    const currentWordStyle = i === this.state.words.length - 1 ? {
+      width: 250,
+      opacity: this.fadeAnim
+    } : {}
+
+    return (
+      <Animated.View key={i} style={[styles.wordContainer, currentWordStyle]}>
+        <Text style={styles.wordText}>{ word }</Text>
+      </Animated.View>
+    )
+  }
 
   _onCountEnd = () => {
     this.setState({ isCountdownVisible: false, isGameRunning: true })
@@ -117,12 +128,17 @@ class Game extends React.Component {
 
   _checkWord = () => {
     const { currentText, score } = this.state
-    const currentWord = last(this.WORDS)
+    const currentWord = last(this.state.words)
 
     if (currentWord === currentText) {
-      this.setState({ score: score + 1 })
-      this.WORDS = slice(this.WORDS, 0, this.WORDS.length - 1)
-      this._input.setNativeProps({ text: '' })
+      Animated.timing(this.fadeAnim, { toValue: 0, duration: 200 }).start(() => {
+        this.setState({
+          score: score + 1,
+          words: slice(this.state.words, 0, this.state.words.length - 1)
+        })
+        this._input.setNativeProps({ text: '' })
+        this.fadeAnim.setValue(1)
+      })
     } else {
       Vibration.vibrate()
     }
@@ -134,6 +150,14 @@ class Game extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  gameContainer: {
+    flex: 1,
+    ...Platform.select({
+      ios: {
+        paddingTop: 20
+      }
+    })
+  },
   noBackground: {
     backgroundColor: 'transparent',
     flex: 1
@@ -152,11 +176,24 @@ const styles = StyleSheet.create({
     padding: 5,
     paddingHorizontal: 15,
     height: 40,
-    width: '100%'
+    width: '100%',
+    ...Platform.select({
+      android: {
+        height: null,
+        padding: 0,
+        paddingHorizontal: 10,
+        marginVertical: 10
+      }
+    })
   },
   input: {
     height: 30,
-    color: '#fff'
+    color: '#fff',
+    ...Platform.select({
+      android: {
+        height: null
+      }
+    })
   },
   wordContainer: {
     backgroundColor: '#fff',
@@ -170,10 +207,11 @@ const styles = StyleSheet.create({
   },
   wordText: {
     color: '#242424',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: 'bold'
   },
   currentWordContainer: {
-    width: 250
+    
   },
   scrollViewContainer: {
     paddingHorizontal: 10
@@ -185,6 +223,11 @@ const styles = StyleSheet.create({
   },
   scoreWord: {
     fontSize: 32
+  },
+  counter: {
+    position: 'absolute',
+    top: 30,
+    left: 10
   }
 })
 

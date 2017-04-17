@@ -8,19 +8,31 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     flex: -1,
-    borderRadius: 20,
+    borderRadius: 120,
     backgroundColor: '#fff',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    shadowColor: '#242424',
+    shadowOffset: {
+      width: 2,
+      height: 2
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 2,
+    paddingTop: 8
   },
   count: {
     fontSize: 68,
     fontFamily: 'Pixel Bug',
-    textAlign: 'center'
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    color: '#242424'
   }
 })
 
 type Props = {
   initial: number,
+  style: Object,
   onCountEnd: () => void
 }
 
@@ -45,7 +57,7 @@ export default class Countdown extends React.Component {
 
   render () {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, this.props.style]}>
         <Text style={styles.count}>{ this.state.count }</Text>
       </View>
     )
@@ -59,8 +71,8 @@ export default class Countdown extends React.Component {
         this.setState({ count: count - 1 })
         this._countdown()
       } else {
-        this.props.onCountEnd()
         clearTimeout(this.countdown)
+        this.props.onCountEnd()
       }
     }, 1000)
   }
