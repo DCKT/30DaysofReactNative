@@ -13,6 +13,7 @@ import Countdown from '../components/Countdown'
 
 import shuffle from '../utils/shuffle'
 import WORDS_LIST from '../utils/words/en'
+import storage from '../utils/storage'
 
 const INITIAL_COUNTDOWN = 3
 const GAME_TIME = 60
@@ -126,6 +127,14 @@ class Game extends React.Component {
 
   _onGameEnd = () => {
     this.setState({ isGameRunning: false })
+    storage
+      .getAllDataForKey('scores')
+      .then(scores => {
+        storage.save({
+          key: 'scores',
+          rawData: scores.push(this.state.score)
+        })
+      })
   }
 
   _onChangeText = currentText => this.setState({ currentText })
@@ -149,7 +158,7 @@ class Game extends React.Component {
   }
 
   _restartGame = () => {
-    this.setState({ isCountdownVisible: true })
+    this.setState({ isCountdownVisible: true, score: 0 })
   }
 }
 
