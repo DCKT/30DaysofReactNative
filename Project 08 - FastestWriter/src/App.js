@@ -7,6 +7,8 @@ import { StackNavigator } from 'react-navigation'
 import Home from './containers/Home'
 import Game from './containers/Game'
 
+import './utils/storage'
+
 const Router = StackNavigator({
   Home: { screen: Home },
   Game: { screen: Game }

@@ -1,7 +1,7 @@
 import Storage from 'react-native-storage'
 import { AsyncStorage } from 'react-native'
 
-export default new Storage({
+global.storage = new Storage({
   storageBackend: AsyncStorage,
   defaultExpires: null
 })

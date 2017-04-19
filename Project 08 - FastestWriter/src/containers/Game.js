@@ -13,12 +13,17 @@ import Countdown from '../components/Countdown'
 
 import shuffle from '../utils/shuffle'
 import WORDS_LIST from '../utils/words/en'
-import storage from '../utils/storage'
 
 const INITIAL_COUNTDOWN = 3
 const GAME_TIME = 60
 
+type Props = {
+  navigation: Object
+}
+
 class Game extends React.Component {
+  props: Props
+
   static navigationOptions = {
     header: {
       visible: false
@@ -33,7 +38,7 @@ class Game extends React.Component {
       words: shuffle(WORDS_LIST).slice(0, 150),
       isCountdownVisible: true,
       isGameRunning: false,
-      score: 0
+      score: 3
     }
   }
 
@@ -93,6 +98,9 @@ class Game extends React.Component {
                   <Button block light style={styles.button} onPress={this._restartGame}>
                     <NText style={{ fontFamily: 'Pixel Bug', fontSize: 20 }}>RESTART</NText>
                   </Button>
+                  <Button block light style={{ marginTop: 15 }} onPress={this._back}>
+                    <NText style={{ fontFamily: 'Pixel Bug', fontSize: 20 }}>BACK</NText>
+                  </Button>
                 </View>
               </View>
             )
@@ -127,12 +135,20 @@ class Game extends React.Component {
 
   _onGameEnd = () => {
     this.setState({ isGameRunning: false })
-    storage
-      .getAllDataForKey('scores')
+    global.storage
+      .load({ key: 'scoresList' })
       .then(scores => {
-        storage.save({
-          key: 'scores',
-          rawData: scores.push(this.state.score)
+        scores.push(this.state.score)
+
+        global.storage.save({
+          key: 'scoresList',
+          rawData: scores.sort((a, b) => b - a)
+        })
+      })
+      .catch(_ => {
+        global.storage.save({
+          key: 'scoresList',
+          rawData: [this.state.score]
         })
       })
   }
@@ -144,7 +160,7 @@ class Game extends React.Component {
     const currentWord = last(this.state.words)
 
     if (currentWord === currentText) {
-      Animated.timing(this.fadeAnim, { toValue: 0, duration: 200 }).start(() => {
+      Animated.timing(this.fadeAnim, { toValue: 0 }).start(() => {
         this.setState({
           score: score + 1,
           words: slice(this.state.words, 0, this.state.words.length - 1)
@@ -159,6 +175,10 @@ class Game extends React.Component {
 
   _restartGame = () => {
     this.setState({ isCountdownVisible: true, score: 0 })
+  }
+
+  _back = () => {
+    this.props.navigation.navigate('Home')
   }
 }
 

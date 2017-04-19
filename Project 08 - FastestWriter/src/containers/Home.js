@@ -4,8 +4,6 @@ import { Button, Text as NText, Icon } from 'native-base'
 import SplashScreen from 'react-native-splash-screen'
 import LinearGradient from 'react-native-linear-gradient'
 
-import storage from '../utils/storage'
-
 type Props = {
   navigation: Object
 }
@@ -14,12 +12,18 @@ class Home extends React.Component {
   props: Props
 
   componentDidMount () {
-    storage
-      .getAllDataForKey('scores')
-      .then(scores => {
-        this.setState({ scores })
-        SplashScreen.hide()
-      })
+    this._loadHighScores()
+    SplashScreen.hide()
+  }
+
+  _loadHighScores = () => {
+    global.storage.load({
+      key: 'scoresList'
+    }).then(scores => {
+      this.setState({ scores })
+    }).catch(_ => {
+      this.setState({ scores: [] })
+    })
   }
 
   static navigationOptions = {
@@ -57,20 +61,22 @@ class Home extends React.Component {
           transparent={false}
           visible={this.state.isModalVisible}
           onRequestClose={this._toggleModal}>
-          <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={styles.linearGradient}>
-            <Text style={styles.title}>HIGH SCORES</Text>
+          <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={[styles.linearGradient, this.state.scores.length ? { paddingTop: 85 } : {}]}>
+            <Text style={[styles.title, { marginBottom: 20 }]}>HIGH SCORES</Text>
 
             {
               this.state.scores.length ? (
                 <ScrollView>
-                  { this.state.scores.map(this._renderScore) }
+                  <View style={{ flex: 1, alignItems: 'center' }}>
+                    { this.state.scores.map(this._renderScore) }
+                  </View>
                 </ScrollView>
               ) : (
                 <Text style={styles.subTitle}>Oh, it seems you didn't have played yet :(</Text>
               )
             }
 
-            <Button transparent light onPress={this._toggleModal} style={{ position: 'absolute', top: 20, right: 5 }}>
+            <Button transparent light onPress={this._openScoresModal} style={{ position: 'absolute', top: 20, right: 5 }}>
               <Icon name='close' style={{ fontSize: 49 }} />
             </Button>
           </LinearGradient>
@@ -80,10 +86,15 @@ class Home extends React.Component {
   }
 
   _renderScore = (score: string, i: number) => (
-    <View style={styles.scoreListItem}>
-      <Text>#{i} - {score}</Text>
+    <View style={styles.scoreListItem} key={i}>
+      <Text style={styles.scoreListItemText}>#{i + 1} - {score}</Text>
     </View>
   )
+
+  _openScoresModal = () => {
+    this._loadHighScores()
+    this._toggleModal()
+  }
 
   _toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible })
@@ -122,11 +133,21 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   scoreListItem: {
     backgroundColor: '#fff',
-    borderRadius: 10
+    borderRadius: 10,
+    padding: 10,
+    width: 150,
+    marginBottom: 15
+  },
+  scoreListItemText: {
+    fontSize: 20,
+    fontFamily: 'Pixel Bug',
+    color: '#242424',
+    textAlign: 'center'
   }
 })
 
