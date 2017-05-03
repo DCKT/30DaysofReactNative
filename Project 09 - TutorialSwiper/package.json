@@ -1,0 +1,45 @@
+{
+	"name": "react-native-starter",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"test": "jest",
+		"android": "react-native run-android",
+		"ios": "react-native run-ios",
+		"lint": "./node_modules/.bin/eslint .",
+		"build:android": "cd android && ./gradlew assembleRelease",
+		"build:ios": "react-native bundle --entry-file index.ios.js --platform ios --dev false --bundle-output ./ios/main.jsbundle --assets-dest ./ios"
+	},
+	"dependencies": {
+		"@expo/ex-navigation": "^2.9.2",
+		"babel-preset-react-native-stage-0": "^1.0.1",
+		"native-base": "^2.0.13",
+		"react": "~15.4.1",
+		"react-native": "0.42.3",
+		"react-native-splash-screen": "^2.0.0",
+		"react-navigation": "^1.0.0-beta.7",
+		"react-redux": "^5.0.3",
+		"redux": "^3.6.0",
+		"redux-logger": "^2.8.2",
+		"redux-thunk": "^2.2.0"
+	},
+	"devDependencies": {
+		"babel-eslint": "^7.1.1",
+		"babel-jest": "19.0.0",
+		"babel-loader": "^6.4.1",
+		"babel-preset-react-native": "1.9.1",
+		"eslint": "^3.18.0",
+		"eslint-config-standard-react": "^4.3.0",
+		"eslint-plugin-flowtype": "^2.30.3",
+		"eslint-plugin-react-native": "^2.3.1",
+		"jest": "19.0.2",
+		"react-test-renderer": "~15.4.1",
+		"reactotron-react-native": "^1.9.1",
+		"reactotron-redux": "^1.9.1",
+		"standard": "^9.0.2"
+	},
+	"jest": {
+		"preset": "react-native"
+	}
+}

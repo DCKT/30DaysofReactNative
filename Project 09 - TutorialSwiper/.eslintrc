@@ -1,0 +1,15 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["standard", "standard-react"],
+  "plugins": [
+    "flowtype",
+    "react-native"
+  ],
+  "rules": {
+    "camelcase": 0
+  },
+  "globals": {
+    "__DEV__": true,
+    "fetch": true
+  }
+}
